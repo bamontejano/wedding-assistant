@@ -349,13 +349,13 @@ const App = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Actúa como un Scout Experto de Proveedores de Bodas. 
-                             El usuario busca: "${query}". 
-                             Responde en formato JSON con un array de 3 objetos llamados "results".
-                             Cada objeto debe tener: "name", "priceRange", "description", "tips" (array de 2 consejos), "whereToLook" (nombre de plataforma o web).
-                             Sé realista con los precios según el presupuesto de la pareja: ${context.settings.totalBudget}€.`,
+                    message: `Como buscador experto nupcial, analiza mi solicitud: "${query}". 
+                              NECESITO: 3 proveedores o estilos de alta calidad para una boda.
+                              FORMATO: JSON con array "results". Cada objeto con: "name", "priceRange", "description", "tips" (2 consejos tecnicos), "whereToLook".
+                              CALIDAD: No sugieras DIY. Sé específico (ej: "Floristería de diseño boutique", "Catering de autor").
+                              PRESUPUESTO: Sé coherente con mi presupuesto total de ${context.settings.totalBudget}€.`,
                     context: context,
-                    format: 'json' // Le pedimos JSON para parsearlo
+                    format: 'json'
                 })
             });
 
