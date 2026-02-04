@@ -313,8 +313,6 @@ const App = {
     },
 
     renderExploreVendors() {
-        const container = document.getElementById('content-wrapper');
-        container.innerHTML = Templates['explore-vendors']();
         document.getElementById('scout-query')?.focus();
     },
 
@@ -492,11 +490,11 @@ const App = {
 
     renderInvitations() {
         const settings = StorageManager.getSettings();
-        const container = document.querySelector('.invitation-preview');
+        const container = document.getElementById('invitation-preview');
         if (container) {
             // Update preview with current settings
-            const coupleEl = container.querySelector('.inv-couple');
-            if (coupleEl) coupleEl.textContent = `${settings.partner1 || 'Nombre 1'} & ${settings.partner2 || 'Nombre 2'}`;
+            const namesEl = container.querySelector('.inv-names');
+            if (namesEl) namesEl.textContent = `${settings.partner1Name || 'Novio'} & ${settings.partner2Name || 'Novia'}`;
 
             const dateEl = container.querySelector('.inv-date');
             if (dateEl) dateEl.textContent = settings.weddingDate ? Utils.formatDate(settings.weddingDate) : 'Fecha por definir';
