@@ -10,6 +10,11 @@ const App = {
     async init() {
         try {
             await StorageManager.init();
+        } catch (e) {
+            console.error('Storage Init Error:', e);
+        }
+
+        try {
             this.initDefaultData();
             this.renderSidebar();
             this.setupEventListeners();
