@@ -1788,6 +1788,21 @@
     font-weight: 600;
 }
 
+.scout-result-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: var(--space-md);
+    margin-top: var(--space-md);
+}
+
+.scout-footer-info {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
 @media (max-width: 768px) {
     .scout-input-wrapper {
         flex-direction: column;

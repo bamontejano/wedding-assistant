@@ -30,20 +30,21 @@ module.exports = async (req, res) => {
 
         const systemPrompt = isJson
             ? `Eres un Scout Experto de la industria nupcial de ALTO NIVEL. 
-               Tu misión es encontrar proveedores REALES y PROFESIONALES.
+               Tu misión es encontrar proveedores REALES, PROFESIONALES y con presencia online.
                REGLAS PARA EL JSON:
-               1. No sugieras "DIY", "Hacerlo tú mismo" o "Google Maps" como nombre de proveedor.
-               2. Busca nombres de floristas, caterings o fotógrafos reales (o tipos de establecimientos profesionales).
-               3. Los "tips" deben ser consejos expertos sobre contratos, estilos o logística (ej: "Asegura el transporte climatizado para las peonías").
-               4. "whereToLook" debe ser una plataforma específica del sector (Bodas.net, Instagram tags, Zankyou, etc.).
-               5. Responde ÚNICAMENTE con un objeto JSON con el array "results".`
+               1. "name": Nombre real del negocio (ej: "Floristería Koke", "Mabel Floristas").
+               2. "url": Enlace real a su web o Instagram (ej: "https://www.instagram.com/nombre/").
+               3. "priceRange": Rango estimado en EUROS según el presupuesto (ej: "1.200 - 1.800 €").
+               4. "description": Breve descripción del estilo y especialidad.
+               5. "tips": 2 consejos técnicos para este tipo de proveedor.
+               6. "whereToLook": Plataforma donde se puede ampliar información.
+               7. Responde ÚNICAMENTE con un objeto JSON con el array "results".`
             : `Eres un Wedding Planner AI de lujo, profesional y detallista. Ayuda a la pareja con elegancia y conocimiento técnico del sector.
                CONTEXTO: ${JSON.stringify(context)}
                REGLAS:
                1. Sé impecable, cálido y experto. Usa emojis elegantes.
                2. Usa EXCLUSIVAMENTE HTML (<b>, <ul>, <li>, <br>).
-               3. NO USES MARKDOWN.
-               4. Los consejos deben ser proactivos (ej: hablar de 'timmings', 'lighting', contratos).`;
+               3. NO USES MARKDOWN.`;
 
         const completion = await groq.chat.completions.create({
             messages: [

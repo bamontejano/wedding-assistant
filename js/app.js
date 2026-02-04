@@ -350,9 +350,9 @@ const App = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: `Como buscador experto nupcial, analiza mi solicitud: "${query}". 
-                              NECESITO: 3 proveedores o estilos de alta calidad para una boda.
-                              FORMATO: JSON con array "results". Cada objeto con: "name", "priceRange", "description", "tips" (2 consejos tecnicos), "whereToLook".
-                              CALIDAD: No sugieras DIY. Sé específico (ej: "Floristería de diseño boutique", "Catering de autor").
+                              NECESITO: 3 proveedores REALES y VIGENTES.
+                              FORMATO: JSON con array "results". Cada objeto con: "name", "url" (link real), "priceRange" (rango en €), "description", "tips" (2 consejos tecnicos), "whereToLook".
+                              CALIDAD: No inventes links, si no tienes la URL exacta, pon un link de búsqueda en Bodas.net.
                               PRESUPUESTO: Sé coherente con mi presupuesto total de ${context.settings.totalBudget}€.`,
                     context: context,
                     format: 'json'
@@ -391,8 +391,11 @@ const App = {
                         <span class="scout-price-badge">${res.priceRange}</span>
                     </div>
                     <p class="scout-description">${res.description}</p>
-                    <div class="scout-footer-info">
-                        <strong>📍 Dónde buscar:</strong> ${res.whereToLook}
+                    <div class="scout-result-footer">
+                        <div class="scout-footer-info">
+                            <strong>📍 Dónde ampliar:</strong> ${res.whereToLook}
+                        </div>
+                        <a href="${res.url}" target="_blank" class="primary-btn-sm" style="text-decoration:none">Contactar / Ver Web 🔗</a>
                     </div>
                 </div>
             `).join('');
