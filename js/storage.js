@@ -1,12 +1,11 @@
 const StorageManager = {
     firebaseConfig: {
-        projectId: "wedding-ai-sync-v1-98765",
-        appId: "1:237428249499:web:91db02b7964b5ec972073e",
-        storageBucket: "wedding-ai-sync-v1-98765.firebasestorage.app",
-        apiKey: "AIzaSyD3YaO3rnzeM0Qs3s64l1gf83gfh-zuYVw",
-        authDomain: "wedding-ai-sync-v1-98765.firebaseapp.com",
-        messagingSenderId: "237428249499",
-        measurementId: "G-XXXXXXXXX"
+        projectId: "wedding-assistant-v1",
+        appId: "1:157530675169:web:74f768b7887f8c9e7164a0",
+        storageBucket: "wedding-assistant-v1.firebasestorage.app",
+        apiKey: "AIzaSyABStlmYAm1gsLg3OKuIFc6yBa7FvwTcFM",
+        authDomain: "wedding-assistant-v1.firebaseapp.com",
+        messagingSenderId: "157530675169"
     },
     db: null,
     weddingId: localStorage.getItem('wedding_id') || null,
