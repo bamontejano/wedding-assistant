@@ -11,10 +11,10 @@ const StorageManager = {
             if (!response.ok) throw new Error('Could not fetch Firebase config');
             this.firebaseConfig = await response.json();
 
-            if (!firebase.apps.length) {
+            if (!firebase.apps.length && this.firebaseConfig.apiKey) {
                 firebase.initializeApp(this.firebaseConfig);
+                this.db = firebase.firestore();
             }
-            this.db = firebase.firestore();
 
             if (this.weddingId) {
                 this.startSync();

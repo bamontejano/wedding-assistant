@@ -7,9 +7,9 @@ const App = {
     countdownInterval: null,
     deferredPrompt: null,
 
-    init() {
+    async init() {
         try {
-            StorageManager.init();
+            await StorageManager.init();
             this.initDefaultData();
             this.renderSidebar();
             this.setupEventListeners();
@@ -193,6 +193,10 @@ const App = {
         if (title) title.textContent = section.charAt(0).toUpperCase() + section.slice(1);
         if (Templates[section] && wrapper) {
             wrapper.innerHTML = Templates[section]();
+            // Ensure the newly added section is visible
+            const newSection = wrapper.querySelector('.content-section');
+            if (newSection) newSection.classList.add('active');
+
             const methodName = 'render' + section.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
             this[methodName]?.();
         }
