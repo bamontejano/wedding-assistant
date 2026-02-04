@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Groq = require('groq-sdk');
 
 module.exports = async (req, res) => {
     // CORS initialization for Vercel
@@ -20,51 +20,46 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const { message, context } = req.body;
+        const { message, context, format } = req.body;
+        const isJson = format === 'json';
 
-        // Gemini Config
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-        const isJson = req.body.format === 'json';
-
-        const systemPrompt = isJson
-            ? `Eres un experto buscador de proveedores. Responde ÚNICAMENTE con un objeto JSON válido. No incluyas explicaciones fuera del JSON.`
-            : `
-    Eres un Wedding Planner AI profesional, empático y experto.
-    Tu objetivo es ayudar a la pareja a organizar su boda perfecta.
-    
-    CONTEXTO DE LA BODA ACTUAL:
-    ${JSON.stringify(context, null, 2)}
-    
-    INSTRUCCIONES:
-    1. Sé breve, amable y directo. Usa emojis.
-    2. Usa EXCLUSIVAMENTE HTML para el formato (<b>, <ul>, <li>, <br>).
-    3. NO uses Markdown (evita asteriscos, almohadillas o triples comillas).
-    4. Si te preguntan por datos, usa el CONTEXTO proporcionado.
-    5. Responde directamente al grano.
-    `;
-
-        const chat = model.startChat({
-            history: [
-                { role: "user", parts: [{ text: systemPrompt }] },
-                { role: "model", parts: [{ text: "Entendido. Soy vuestro Wedding Planner virtual. ¿En qué puedo ayudaros?" }] },
-            ],
+        // Groq Config
+        const groq = new Groq({
+            apiKey: process.env.GROQ_API_KEY,
         });
 
-        const result = await chat.sendMessage(message);
-        const response = result.response.text();
+        const systemPrompt = isJson
+            ? `Eres un experto buscador de proveedores de bodas. Responde ÚNICAMENTE con un objeto JSON válido que contenga un array "results". Cada objeto debe tener: "name", "priceRange", "description", "tips" (array de 2 strings), "whereToLook". No incluyas explicaciones fuera del JSON.`
+            : `Eres un Wedding Planner AI profesional, empático y experto. Ayuda a la pareja a organizar su boda.
+               CONTEXTO: ${JSON.stringify(context)}
+               REGLAS:
+               1. Sé breve y amable. Usa emojis.
+               2. Usa EXCLUSIVAMENTE HTML básicos (<b>, <ul>, <li>, <br>).
+               3. NO USES MARKDOWN (evita **, #, \`\`\`).
+               4. Responde en español.`;
 
-        res.status(200).json({ response });
+        const completion = await groq.chat.completions.create({
+            messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: message },
+            ],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.7,
+            max_tokens: 1024,
+            response_format: isJson ? { type: "json_object" } : undefined,
+        });
+
+        const responseText = completion.choices[0]?.message?.content || "";
+        res.status(200).json({ response: responseText });
 
     } catch (error) {
-        console.error('Vercel API Error Full:', error);
-        const apiKeyStatus = process.env.GEMINI_API_KEY ? `Present(Length: ${process.env.GEMINI_API_KEY.length})` : 'Missing';
+        console.error('Groq API Error:', error);
+        const apiKeyStatus = process.env.GROQ_API_KEY ? `Present(Len: ${process.env.GROQ_API_KEY.length})` : 'Missing';
 
         res.status(500).json({
-            response: `Lo siento, tuve un problema al conectar con la IA. 
-            < br ><small><b>Debug Error:</b> ${error.message}</small>
-            <br><small><b>Key Status:</b> ${apiKeyStatus}</small>`
+            response: `Lo siento, hubo un error con Groq. 
+            <br><small><b>Debug:</b> ${error.message}</small>
+            <br><small><b>Key:</b> ${apiKeyStatus}</small>`
         });
     }
 };
