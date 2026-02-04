@@ -198,11 +198,11 @@ const App = {
         if (title) title.textContent = section.charAt(0).toUpperCase() + section.slice(1);
         if (Templates[section] && wrapper) {
             wrapper.innerHTML = Templates[section]();
-            // Ensure the newly added section is visible
+            // Ensure the newly added section is visible (backup if template lacks active class)
             const newSection = wrapper.querySelector('.content-section');
             if (newSection) newSection.classList.add('active');
 
-            const methodName = 'render' + section.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
+            const methodName = 'render' + section.charAt(0).toUpperCase() + section.slice(1).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
             this[methodName]?.();
         }
         this.updateGlobalStats();
@@ -317,7 +317,7 @@ const App = {
         }
     },
 
-    renderExploreVendors() {
+    renderScout() {
         document.getElementById('scout-query')?.focus();
     },
 

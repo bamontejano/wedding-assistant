@@ -88,7 +88,7 @@ const Templates = {
                 <div class="section-header">
                     <div class="section-title-group"><h2>Directorio de Proveedores</h2><p class="section-subtitle">Gestiona todos los servicios para tu boda</p></div>
                     <div class="header-actions">
-                        <button id="scout-vendors-btn" class="secondary-btn nav-trigger" data-section="explore-vendors"><span>🔍</span> Buscar con IA</button>
+                        <button id="scout-vendors-btn" class="secondary-btn nav-trigger" data-section="scout"><span>🔍</span> Buscar con IA</button>
                         <button id="add-vendor-btn" class="primary-btn"><span>➕</span> Nuevo Proveedor</button>
                     </div>
                 </div>
@@ -96,9 +96,9 @@ const Templates = {
             </section>`;
     },
 
-    'explore-vendors'() {
+    scout() {
         return `
-            <section id="explore-vendors" class="content-section">
+            <section id="scout" class="content-section active">
                 <div class="section-header">
                     <div class="section-title-group">
                         <a href="#vendors" class="back-link nav-trigger" data-section="vendors">← Volver a Directorio</a>
@@ -116,7 +116,6 @@ const Templates = {
                 </div>
 
                 <div id="scout-results" class="scout-results-container">
-                    <!-- Resultados de la IA aquí -->
                     <div class="empty-state">
                         <p>Escribe arriba lo que necesitas para empezar el rastreo...</p>
                     </div>
