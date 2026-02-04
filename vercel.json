@@ -4,6 +4,10 @@
         {
             "source": "/api/chat",
             "destination": "/api/chat.js"
+        },
+        {
+            "source": "/api/config",
+            "destination": "/api/config.js"
         }
     ]
 }

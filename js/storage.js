@@ -1,24 +1,30 @@
 const StorageManager = {
-    firebaseConfig: {
-        projectId: "wedding-assistant-v1",
-        appId: "1:157530675169:web:74f768b7887f8c9e7164a0",
-        storageBucket: "wedding-assistant-v1.firebasestorage.app",
-        apiKey: "AIzaSyABStlmYAm1gsLg3OKuIFc6yBa7FvwTcFM",
-        authDomain: "wedding-assistant-v1.firebaseapp.com",
-        messagingSenderId: "157530675169"
-    },
+    firebaseConfig: {},
     db: null,
     weddingId: localStorage.getItem('wedding_id') || null,
     isSyncing: false,
 
     async init() {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(this.firebaseConfig);
-        }
-        this.db = firebase.firestore();
+        try {
+            // Fetch configuration from API (avoids exposing keys in GitHub)
+            const response = await fetch('/api/config');
+            if (!response.ok) throw new Error('Could not fetch Firebase config');
+            this.firebaseConfig = await response.json();
 
-        if (this.weddingId) {
-            this.startSync();
+            if (!firebase.apps.length) {
+                firebase.initializeApp(this.firebaseConfig);
+            }
+            this.db = firebase.firestore();
+
+            if (this.weddingId) {
+                this.startSync();
+            }
+        } catch (error) {
+            console.error('StorageManager Init Error:', error);
+            // Fallback for extreme cases or local development if API is down
+            if (!firebase.apps.length && this.firebaseConfig.apiKey !== "AIzaSyABStlmYAm1gsLg3OKuIFc6yBa7FvwTcFM") {
+                console.warn('Using local hardcoded config fallback');
+            }
         }
     },
 

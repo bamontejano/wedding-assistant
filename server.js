@@ -15,6 +15,7 @@ app.use(express.static(path.join(__dirname)));
 
 // API Routes
 const chatHandler = require('./api/chat');
+const configHandler = require('./api/config');
 
 // Wrapper to handle Vercel-style function in Express
 app.all('/api/chat', async (req, res) => {
@@ -22,6 +23,17 @@ app.all('/api/chat', async (req, res) => {
         await chatHandler(req, res);
     } catch (error) {
         console.error('API Error:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+});
+
+app.all('/api/config', async (req, res) => {
+    try {
+        await configHandler(req, res);
+    } catch (error) {
+        console.error('Config API Error:', error);
         if (!res.headersSent) {
             res.status(500).json({ error: 'Internal Server Error' });
         }
