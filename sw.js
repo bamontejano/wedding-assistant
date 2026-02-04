@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wedding-planner-v1';
+const CACHE_NAME = 'wedding-planner-v2';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -49,8 +49,9 @@ self.addEventListener('fetch', (event) => {
     // Ignore non-http requests (like data: or chrome-extension:)
     if (!event.request.url.startsWith('http')) return;
 
-    // For API calls or Firebase, use Network only (let the app handle offline logic)
-    if (event.request.url.includes('firestore.googleapis.com') ||
+    // For API calls, dynamic config, or Firebase, skip caching
+    if (event.request.url.includes('/api/') ||
+        event.request.url.includes('firestore.googleapis.com') ||
         event.request.url.includes('generativelanguage.googleapis.com')) {
         return;
     }

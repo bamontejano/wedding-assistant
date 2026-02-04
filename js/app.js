@@ -197,13 +197,17 @@ const App = {
 
         if (title) title.textContent = section.charAt(0).toUpperCase() + section.slice(1);
         if (Templates[section] && wrapper) {
+            console.log('Rendering section:', section);
             wrapper.innerHTML = Templates[section]();
             // Ensure the newly added section is visible (backup if template lacks active class)
             const newSection = wrapper.querySelector('.content-section');
             if (newSection) newSection.classList.add('active');
 
             const methodName = 'render' + section.charAt(0).toUpperCase() + section.slice(1).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            console.log('Calling method:', methodName);
             this[methodName]?.();
+        } else {
+            console.warn('Template not found for section:', section);
         }
         this.updateGlobalStats();
     },
@@ -683,6 +687,14 @@ const App = {
 
         upd();
         this.countdownInterval = setInterval(upd, 1000);
+    },
+
+    async forceUpdate() {
+        if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            for (let reg of regs) await reg.unregister();
+        }
+        window.location.reload(true);
     }
 };
 
